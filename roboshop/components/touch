@@ -1,0 +1,12 @@
+cart.sh
+catalogue.sh
+common.sh
+frontend.sh
+mongodb.sh
+mysql.sh
+payment.sh
+rabbitmq.sh
+redis.sh
+shipping.sh
+touch
+user.sh
