@@ -1,7 +1,8 @@
 #!/bin/bash
-
-LID="lt-01034a8f3c0dc4be2"
-LVER=2
+# https://docs.aws.amazon.com/cli/index.html
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html
+LID="lt-0ebfe9effc70e8e15"
+LVER=1
 INSTANCE_NAME=$1
 
 if [ -z "${INSTANCE_NAME}" ]; then
@@ -23,5 +24,7 @@ fi
 
 IP=$(aws ec2 run-instances --launch-template LaunchTemplateId=$LID,Version=$LVER --tag-specifications "ResourceType=spot-instances-request,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" | jq .Instances[].PrivateIpAddress | sed -e 's/"//g')
 
+
+HostedZoneId=$(aws route53 list-hosted-zones | jq '.HostedZones[] | "\(.Id)"' | sed -e 's/\"/\s/g' | sed 's/[^0-9|A-Z]//g')
 sed -e "s/INSTANCE_NAME/$INSTANCE_NAME/" -e "s/INSTANCE_IP/$IP/" record.json >/tmp/record.json
-aws route53 change-resource-record-sets --hosted-zone-id Z06421191721I0AOBUGO2 --change-batch file:///tmp/record.json | jq
+aws route53 change-resource-record-sets --hosted-zone-id $HostedZoneId --change-batch file:///tmp/record.json | jq
