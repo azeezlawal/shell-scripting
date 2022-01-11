@@ -2,7 +2,7 @@
 # https://docs.aws.amazon.com/cli/index.html
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html
 LID="lt-0ebfe9effc70e8e15"
-LVER=1
+LVER=2
 INSTANCE_NAME=$1
 
 if [ -z "${INSTANCE_NAME}" ]; then
